@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-html-audio-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css">
+  <style>
+  .stimulus { font-size: 32px; }
+  </style>
+</head>
+
+<script>
+  var timeline = [];
+
+  timeline.push(
+    {
+      type: jsPsychBrowserCheck
+    }
+  );
+
+  timeline.push({
+    type: 'html-audio-response',
+		  stimulus: '<audio autoplay><source src="stimulus.ogg" type="audio/ogg"/></audio><div style="max-width:600px;"><p><h2>Do you think the relationship between Goofy and Pluto is kind of weird?</h2></p></div>',
+    prompt: "Tell us something about the prompt:",
+    stimulus_duration: "200000",
+    manually_end_recording: false,
+    enable_mic_message: false,
+    wait_for_mic_approval: true
+  });
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

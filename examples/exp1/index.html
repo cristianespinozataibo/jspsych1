@@ -1,0 +1,45 @@
+
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Untitled Experiment</title>
+      <link href="./jsPsych/jspsych.css" rel="stylesheet" type="text/css"></link>
+      <script type="text/javascript" src="./jsPsych/jspsych.min.js"></script>
+    </head>
+    <body id="jsPsych-Window" class="jsPsych-Window">
+    </body>
+    <script>
+      
+      
+      
+  function saveDataPHP(data) {
+    let request = new XMLHttpRequest();
+    request.open("POST", "save_data.php", true);
+    request.onload = () => {
+      if (request.status === 200) {
+        let response = JSON.parse(request.responseText);
+        console.log(response);
+      }
+    }
+    request.send(
+      JSON.stringify({ filedata: data })
+      );
+  }
+      
+      jsPsych.init({"display_element":undefined,"auto_update_progress_bar":true,"exclusions":{"min_height":0,"min_width":0,"audio":false},"max_load_time":60000,"show_preload_progress_bar":true,"on_data_update":function on_data_update(data) {
+	return undefined;
+},"on_finish":function on_finish(data) {
+	return undefined;
+},"show_progress_bar":false,"preload_images":[],"on_trial_finish":function on_trial_finish(data) {
+	return undefined;
+},"on_interaction_data_update":function on_interaction_data_update(data) {
+	return undefined;
+},"default_iti":0,"preload_audio":[],"on_trial_start":function on_trial_start(data) {
+	return undefined;
+},"timeline":[{"type":"survey-text","questions":[{"prompt":"Your name","value":"","rows":1,"columns":40,"required":false}],"preamble":null,"button_label":"Continue","data":{},"on_start":undefined,"on_finish":undefined,"on_load":undefined,"post_trial_gap":null},{"type":"call-function","func":function() {
+    saveDataPHP(jsPsych.data.get().csv());
+  }},{"margin_vertical":"0px","button_html":"<button class=\"jspsych-btn\">%choice%</button>","data":{},"margin_horizontal":"8px","stimulus":"Who's your favorite villain?","response_ends_trial":true,"type":"html-button-response","stimulus_duration":null,"post_trial_gap":null,"on_load":undefined,"on_start":undefined,"on_finish":undefined,"choices":["muttley","dick dastardly"],"prompt":null,"trial_duration":null},{"data":{},"max":100,"stimulus":"Stimulus","start":50,"response_ends_trial":true,"type":"html-slider-response","stimulus_duration":null,"post_trial_gap":null,"labels":[],"on_load":undefined,"min":0,"on_start":undefined,"on_finish":undefined,"step":1,"button_label":"Continue","prompt":null,"trial_duration":null}]});
+    </script>
+  </html>

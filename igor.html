@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <!--<script src="jspsych.js"></script>-->
+  <script src="node_modules/jspsych/dist/index.browser.js"></script>
+  <!--<script src="plugins/jspsych-html-audio-response.js"></script>-->
+  <script src="node_modules/@jspsych/plugin-html-audio-response/dist/index.browser.js"></script>
+  <script src="node_modules/@jspsych/plugin-browser-check/dist/index.browser.js"></script>
+  <script src="node_modules/@jspsych/plugin-html-keyboard-response/dist/index.browser.js"></script>
+  <script src="node_modules/@jspsych/plugin-initialize-microphone/dist/index.browser.js"></script>
+  <script src="node_modules/@jspsych/plugin-survey-text/dist/index.browser.js"></script>
+  <script src="node_modules/@jspsych/plugin-audio-button-response/dist/index.browser.js"></script>
+  <link rel="stylesheet" href="css/jspsych.css">
+  <style>
+  .stimulus { font-size: 32px; }
+  </style>
+</head>
+
+<script>
+  const jsPsych=initJsPsych({
+    on_finish: function() {
+      let currentDate=new Date().toJSON();
+      jsPsych.data.displayData();
+      jsPsych.data.get().localSave('CSV', "output"+currentDate+".csv");
+    },
+    show_progress_bar: true
+  });
+  
+  var timeline = [];
+
+  const check_browser_trial = {
+    type: jsPsychBrowserCheck
+  };
+
+  const personal_data = {
+    type: jsPsychSurveyText,
+    questions: [
+      {prompt: "Name"},
+      {prompt: "Experimenter"},
+      {prompt: "Date", placeholder: 'mm/dd/yyy'}
+    ]
+  }
+
+  const audio_playback = {
+    type: jsPsychAudioButtonResponse,
+    stimulus: "stimulus.ogg",
+    choices: ["green_arrow.png"],
+    response_allowed_while_playing: false,
+    button_html: '<img src="%choice%" />',
+  }
+
+  var init_mic = {
+    type: jsPsychInitializeMicrophone
+  }
+
+  const audio_trial = {
+    type: jsPsychHtmlAudioResponse,
+    stimulus: `
+    <p style="font-size:48px; color:red;">You can speak now...</p>`,
+    recording_duration: 20000,
+    done_button_label: 'Finish recording',
+  }
+
+  timeline.push(check_browser_trial, personal_data, init_mic, audio_playback, audio_trial);
+
+  //timeline.push({
+  //  type: jsPsychHtmlAudioResponse,
+	//	stimulus: '<audio autoplay><source src="stimulus.ogg" type="audio/ogg"/></audio><div style="max-width:600px;"><p><h2>Do you think the relationship between Goofy and Pluto is kind of weird?</h2></p></div>',
+  //  recording_duration: "200000",
+  //  allow_playback: false,
+  //});
+
+  
+jsPsych.run(timeline);
+  
+</script>
+
+</html>
