@@ -45,8 +45,16 @@
 
   const audio_playback = {
     type: jsPsychAudioButtonResponse,
-    stimulus: "stimulus.ogg",
+    stimulus: "audio/stimulus.ogg",
     choices: ["green_arrow.png"],
+    response_allowed_while_playing: false,
+    button_html: '<img src="%choice%" />',
+  }
+
+  const audio_likert = {
+    type: jsPsychAudioButtonResponse,
+    stimulus: "audio/prompt.ogg",
+    choices: ["images/likert1.png", "images/likert2.png", "images/likert3.png", "images/likert4.png", "images/likert5.png"],
     response_allowed_while_playing: false,
     button_html: '<img src="%choice%" />',
   }
@@ -63,7 +71,7 @@
     done_button_label: 'Finish recording',
   }
 
-  timeline.push(check_browser_trial, personal_data, init_mic, audio_playback, audio_trial);
+  timeline.push(check_browser_trial, personal_data, init_mic, audio_likert, audio_playback, audio_trial);
 
   //timeline.push({
   //  type: jsPsychHtmlAudioResponse,
