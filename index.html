@@ -23,7 +23,7 @@
     on_finish: function() {
       let currentDate=new Date().toJSON();
       jsPsych.data.displayData();
-      jsPsych.data.get().localSave('CSV', "output"+currentDate+".csv");
+      jsPsych.data.get().localSave('JSON', "output"+currentDate+".json");
     },
     show_progress_bar: true
   });
@@ -37,16 +37,18 @@
   const personal_data = {
     type: jsPsychSurveyText,
     questions: [
-      {prompt: "Name"},
-      {prompt: "Experimenter"},
-      {prompt: "Date", placeholder: 'mm/dd/yyy'}
+      {prompt: "Subject ID number"},
+      {prompt: "Session number"},
+      {prompt: "Date", placeholder: 'mm/dd/yyy'},
+      {prompt: "School"},
+      {prompt: "Experimenter initials"}
     ]
   }
 
   const audio_playback = {
     type: jsPsychAudioButtonResponse,
     stimulus: "audio/stimulus.ogg",
-    choices: ["green_arrow.png"],
+    choices: ["images/green_arrow.png"],
     response_allowed_while_playing: false,
     button_html: '<img src="%choice%" />',
   }
@@ -54,7 +56,7 @@
   const audio_likert = {
     type: jsPsychAudioButtonResponse,
     stimulus: "audio/prompt.ogg",
-    choices: ["images/likert1.png", "images/likert2.png", "images/likert3.png", "images/likert4.png", "images/likert5.png"],
+    choices: ["images/likert1-with-number.png", "images/likert2-with-number.png", "images/likert3-with-number.png", "images/likert4-with-number.png", "images/likert5-with-number.png"],
     response_allowed_while_playing: false,
     button_html: '<img src="%choice%" />',
   }
@@ -69,9 +71,78 @@
     <p style="font-size:48px; color:red;">You can speak now...</p>`,
     recording_duration: 20000,
     done_button_label: 'Finish recording',
+    save_audio_url: false
   }
 
-  timeline.push(check_browser_trial, personal_data, init_mic, audio_likert, audio_playback, audio_trial);
+  const introduction = {
+    type: jsPsychAudioButtonResponse,
+    stimulus: "audio/rachel-introduction.ogg",
+    choices: ["images/dog-sky-small.jpg", "images/green_arrow.png"],
+    response_allowed_while_playing: true,
+    button_html: '<img src="%choice%" />',
+  }
+
+  const audio_sky = {
+    type: jsPsychHtmlAudioResponse,
+    stimulus: `
+    <p style="font-size:48px; color:red;">You can speak now...</p>`,
+    recording_duration: 20000,
+    done_button_label: 'Finish recording',
+    save_audio_url: false
+  }
+
+  const audio_likert_amusement = {
+    type: jsPsychAudioButtonResponse,
+    stimulus: "audio/rachel-ok for this one.ogg",
+    choices: ["images/likert1-with-number.png", "images/likert2-with-number.png", "images/likert3-with-number.png", "images/likert4-with-number.png", "images/likert5-with-number.png"],
+    response_allowed_while_playing: true,
+    button_html: '<img src="%choice%" />',
+  }
+
+  const did_you_learn = {
+    type: jsPsychAudioButtonResponse,
+    stimulus: "audio/rachel-last time we met-full.ogg",
+    choices: ["images/idea.jpg", "images/green_arrow.png"],
+    response_allowed_while_playing: true,
+    button_html: '<img src="%choice%" />',
+  }
+
+  const audio_did_you_learn = {
+    type: jsPsychHtmlAudioResponse,
+    stimulus: `
+    <p style="font-size:48px; color:red;">You can speak now...</p>`,
+    recording_duration: 20000,
+    done_button_label: 'Finish recording',
+    save_audio_url: false
+  }
+
+  const audio_likert_how_much_fun = {
+    type: jsPsychAudioButtonResponse,
+    stimulus: "audio/rachel-how much fun.ogg",
+    choices: ["images/likert1-with-number.png", "images/likert2-with-number.png", "images/likert3-with-number.png", "images/likert4-with-number.png", "images/likert5-with-number.png"],
+    response_allowed_while_playing: true,
+    button_html: '<img src="%choice%" />',
+  }
+
+  const audio_likert_how_much_time = {
+    type: jsPsychAudioButtonResponse,
+    stimulus: "audio/rachel-how much time.ogg",
+    choices: ["images/likert1-with-number.png", "images/likert2-with-number.png", "images/likert3-with-number.png", "images/likert4-with-number.png", "images/likert5-with-number.png"],
+    response_allowed_while_playing: true,
+    button_html: '<img src="%choice%" />',
+  }
+
+  const audio_likert_how_curious = {
+    type: jsPsychAudioButtonResponse,
+    stimulus: "audio/rachel-how curious.ogg",
+    choices: ["images/likert1-with-number.png", "images/likert2-with-number.png", "images/likert3-with-number.png", "images/likert4-with-number.png", "images/likert5-with-number.png"],
+    response_allowed_while_playing: true,
+    button_html: '<img src="%choice%" />',
+  }
+
+  timeline.push(check_browser_trial, personal_data, init_mic, introduction, audio_sky, 
+                audio_likert_amusement, did_you_learn, audio_did_you_learn, audio_likert_how_much_fun,
+                audio_likert_how_much_time, audio_likert_how_curious);
 
   //timeline.push({
   //  type: jsPsychHtmlAudioResponse,
