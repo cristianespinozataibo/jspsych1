@@ -17,6 +17,11 @@
   <link rel="stylesheet" href="css/jspsych.css">
   <style>
   .stimulus { font-size: 32px; }
+
+  .jspsych-btn {
+    color: red;
+    font-size: 25px;
+  }
   </style>
 </head>
 
@@ -75,7 +80,7 @@
   const what_color_is_the_sky_intro = {
     type: jsPsychAudioButtonResponse,
     stimulus: "audio/rachel-what color is the sky.ogg",
-    response_allowed_while_playing: true,
+    response_allowed_while_playing: false,
     choices: ["images/sky-small.jpg"],
     button_html: '<img src="%choice%" />',
     trial_ends_after_audio: true,
@@ -91,7 +96,7 @@
   const what_color_is_the_sky_rec = {
     type: jsPsychHtmlAudioResponse,
     stimulus: `
-    <p style="font-size:48px; color:red;">You can speak now...</p>`,
+    <p style="font-size:48px; color:green;">You can speak now...</p>`,
     recording_duration: 20000,
     done_button_label: 'Finish recording',
     save_audio_url: false
@@ -101,7 +106,7 @@
     type: jsPsychAudioButtonResponse,
     stimulus: "audio/rachel-ok for this one.ogg",
     choices: ["images/likert1-with-number.png", "images/likert2-with-number.png", "images/likert3-with-number.png", "images/likert4-with-number.png", "images/likert5-with-number.png"],
-    response_allowed_while_playing: true,
+    response_allowed_while_playing: false,
     button_html: '<img src="%choice%" />',
   }
 
@@ -124,7 +129,7 @@
   const last_time_we_met_rec = {
     type: jsPsychHtmlAudioResponse,
     stimulus: `
-    <p style="font-size:48px; color:red;">You can speak now...</p>`,
+    <p style="font-size:48px; color:green;">You can speak now...</p>`,
     recording_duration: 20000,
     done_button_label: 'Finish recording',
     save_audio_url: false
@@ -178,6 +183,12 @@
     stimulus: ''
   }
 
+  const end = {
+    type: jsPsychHtmlButtonResponse,
+    choices: ["images/thanks-small.png"],
+    button_html: '<img src="%choice%" />',
+    stimulus: ''
+  }
 
   timeline.push(preload, check_browser_trial, personal_data, init_mic, start, 
                 introduction, 
@@ -186,7 +197,8 @@
                 last_time_we_met_intro, last_time_we_met_mic, last_time_we_met_rec,
                 how_much_fun_intro, how_much_fun_likert,
                 how_much_time_intro, how_much_time_likert,
-                how_curious_intro, how_curious_likert);
+                how_curious_intro, how_curious_likert,
+                end);
 
   //timeline.push({
   //  type: jsPsychHtmlAudioResponse,
