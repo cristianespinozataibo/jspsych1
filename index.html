@@ -57,7 +57,7 @@
     ]
   }
 
-  var init_mic = {
+  const init_mic = {
     type: jsPsychInitializeMicrophone
   }
 
@@ -71,7 +71,7 @@
   const introduction = {
     type: jsPsychAudioButtonResponse,
     stimulus: "audio/rachel-introduction-no-sky.ogg",
-    response_allowed_while_playing: true,
+    response_allowed_while_playing: false,
     button_html: '',
     trial_ends_after_audio: true,
     choices: []
@@ -113,7 +113,7 @@
   const last_time_we_met_intro = {
     type: jsPsychAudioButtonResponse,
     stimulus: "audio/rachel-last time we met.ogg",
-    response_allowed_while_playing: true,
+    response_allowed_while_playing: false,
     button_html: '',
     trial_ends_after_audio: true,
     choices: []
@@ -138,7 +138,7 @@
   const how_much_fun_intro = {
     type: jsPsychAudioButtonResponse,
     stimulus: "audio/rachel-how much fun-no-numbers.ogg",
-    response_allowed_while_playing: true,
+    response_allowed_while_playing: false,
     button_html: '',
     trial_ends_after_audio: true,
     choices: []
@@ -154,7 +154,7 @@
   const how_much_time_intro = {
     type: jsPsychAudioButtonResponse,
     stimulus: "audio/rachel-how much time-no-numbers.ogg",
-    response_allowed_while_playing: true,
+    response_allowed_while_playing: false,
     button_html: '',
     trial_ends_after_audio: true,
     choices: []
@@ -170,7 +170,7 @@
   const how_curious_intro = {
     type: jsPsychAudioButtonResponse,
     stimulus: "audio/rachel-how curious-no-numbers.ogg",
-    response_allowed_while_playing: true,
+    response_allowed_while_playing: false,
     button_html: '',
     trial_ends_after_audio: true,
     choices: []
@@ -190,7 +190,20 @@
     stimulus: ''
   }
 
-  timeline.push(preload, check_browser_trial, personal_data, init_mic, start, 
+  const show_save_data = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: function() {
+      let currentDate=new Date().toJSON();
+      let filename= "output"+currentDate+".json"
+      jsPsych.data.get().localSave('JSON', filename);
+      //jsPsych.data.displayData();
+      return "File saved as " + filename;
+    },
+    choices: ['Run again']
+  };
+
+  const trial_loop = {
+    timeline: [personal_data, start, 
                 introduction, 
                 what_color_is_the_sky_intro, what_color_is_the_sky_mic, what_color_is_the_sky_rec, 
                 audio_likert_amusement, 
@@ -198,17 +211,30 @@
                 how_much_fun_intro, how_much_fun_likert,
                 how_much_time_intro, how_much_time_likert,
                 how_curious_intro, how_curious_likert,
-                end);
+                end, show_save_data],
+    loop_function: function(data) {
+/*       if(jsPsych.pluginAPI.compareKeys(data.values()[20].response, 0)){
+            return true;
+        } else {
+            return false;
+        }; */
+        return true;
+    }
+  };
 
-  //timeline.push({
-  //  type: jsPsychHtmlAudioResponse,
-	//	stimulus: '<audio autoplay><source src="stimulus.ogg" type="audio/ogg"/></audio><div style="max-width:600px;"><p><h2>Do you think the relationship between Goofy and Pluto is kind of weird?</h2></p></div>',
-  //  recording_duration: "200000",
-  //  allow_playback: false,
-  //});
+/*   timeline.push(personal_data, start, 
+                introduction, 
+               what_color_is_the_sky_intro, what_color_is_the_sky_mic, what_color_is_the_sky_rec, 
+                audio_likert_amusement, 
+                last_time_we_met_intro, last_time_we_met_mic, last_time_we_met_rec,
+                how_much_fun_intro, how_much_fun_likert,
+                how_much_time_intro, how_much_time_likert,
+                how_curious_intro, how_curious_likert,
+                end); */
+
 
   
-jsPsych.run(timeline);
+jsPsych.run([preload, check_browser_trial, preload, init_mic, trial_loop]);
   
 </script>
 
